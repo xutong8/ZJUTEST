@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>TEST-2</title>
+		
+		<style type="text/css">
+			
+			*{
+				padding: 0;
+				margin: 0;
+			}
+			
+			html,body{
+			
+				width: 100%;
+				height: 100%;
+			}
+			
+			body {
+				display: -webkit-flex;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				flex-direction: column;
+			}
+			
+			.container{
+				width: 800px;
+				height: 200px;
+				padding: 20px;
+				background: skyblue;
+				display: -webkit-flex;
+				display: flex;
+				flex-direction: column;
+			}
+			
+			#add{
+				width: 30px;
+				height: 30px;
+				background-image: url(img/add.png);
+				background-size: cover;
+				margin-left: auto;
+			}
+			
+			#content{
+				width: 760px;
+				height: 120px;
+				margin: 10px;
+				padding: 10px;
+				background: plum;
+				display: -webkit-flex;
+				display: flex;
+			}
+			
+			.items{
+				
+				width: 140px;
+				height: 100px;
+				background: orangered;
+				margin: 10px;
+			}
+			
+			#delete{
+				
+				margin-top: 20px;
+				width: 100px;
+				height: 100px;
+				background-image: url(img/delete.png);
+				background-size: cover;
+				border: 1px solid black;
+			}
+			
+		</style>
+		
+	</head>
+	<body>
+		
+		<div class="container">
+			<div id="add"></div>
+			<div id="content">
+			</div>
+		</div>
+		<div id="delete"></div>
+		
+		<script>
+			
+			var index = 0;
+			
+			window.onload = function(){
+				
+				var content = document.getElementById("content");
+				
+				var add = document.getElementById("add");
+				add.addEventListener("click", function(){
+					
+					var element = document.createElement("div");
+					element.className = "items";
+					element.draggable = "true";
+					element.id = "index" +index;
+					index++;
+					element.addEventListener("dragstart", function(e){
+						
+						e.dataTransfer.setData("pid", e.target.id);
+						console.log(e.target);
+					});
+					
+					content.appendChild(element);
+				});
+				
+				var del = document.getElementById("delete");
+				del.addEventListener("drop", function(e){
+					
+					let data = e.dataTransfer.getData("pid");
+					let p = document.getElementById(data);
+					console.log(p);
+					content.removeChild(p);
+				});
+				
+				document.addEventListener("dragover", function(e){
+					
+					e.preventDefault();
+				});
+			}
+			
+		</script>
+		
+	</body>
+</html>

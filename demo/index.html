@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>TEST-1</title>
+		<style>
+			* {
+				padding: 0;
+				margin: 0;
+			}
+
+			html,
+			body {
+				width: 100%;
+				height: 100%;
+			}
+
+			body {
+				display: -webkit-flex;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				flex-direction: column;
+			}
+
+			.container {
+				width: 500px;
+				height: 400px;
+				background: skyblue;
+				position: relative;
+			}
+
+			.board {
+				width: 200px;
+				height: 100px;
+				background: yellowgreen;
+				display: flex;
+				display: -webkit-flex;
+				align-items: center;
+				justify-content: center;
+			}
+			
+			.content{
+				background: red;
+			}
+			
+			.desc {
+				width: 300px;
+				height: 100px;
+				background: rosybrown;
+				display: flex;
+				display: -webkit-flex;
+				align-items: center;
+				justify-content: center;
+			}
+
+			.red {
+				background: red;
+				width: 20px;
+				height: 20px;
+				position: absolute;
+			}
+
+			.over {
+				width: 30px;
+				height: 30px;
+				background-image: url(img/exit.png);
+				background-size: cover;
+				position: absolute;
+			}
+		</style>
+	</head>
+	<body>
+
+		<div class="container">
+
+		</div>
+		<div class="board">
+			<div class="content">
+				Score: &nbsp;<span id="score">0</span>
+			</div>
+		</div>
+		<div class="desc">
+			<div class="content">
+				
+			</div>
+		</div>
+		<div>
+			<input type="range" id="range" />
+		</div>
+
+		<script>
+			
+			window.onload = function() {
+			
+				var time1 = 200, time2 = 1000;
+				
+				var score = 0;
+
+				var container = document.getElementsByClassName("container")[0];
+				var w = container.offsetWidth;
+				var h = container.offsetHeight;
+				//console.log(w + " " + h);
+				
+				var timeId = setInterval(appear, time1);
+				
+				var overId = setInterval(gameOver, time2);
+				
+				function appear() {
+				
+					var red = document.createElement("div");
+					red.className = "red";
+					red.style.left = ((w - 20) * Math.random()) + "px";
+					red.style.top = ((h - 20) * Math.random()) + "px";
+					red.style.opacity = (Math.random() * 10 + 1) / 10;
+				
+					red.addEventListener("click", function() {
+				
+						score += Math.ceil(this.style.opacity * 10);
+						this.style.display = "none";
+						var scoreDOM = document.getElementById("score");
+						scoreDOM.innerText = score;
+					});
+				
+					setTimeout(function() {
+				
+						red.style.display = "none";
+					}, 1000);
+				
+					container.appendChild(red);
+					//console.log(red.offsetLeft + " " + red.offsetTop);
+				
+					//console.log("score: " + score);
+				
+				}
+				
+				function gameOver() {
+				
+					var over = document.createElement("div");
+					over.className = "over";
+					over.style.left = ((w - 30) * Math.random()) + "px";
+					over.style.top = ((h - 30) * Math.random()) + "px";
+				
+					over.addEventListener("click", function() {
+						clearInterval(timeId);
+						clearInterval(overId);
+						var descContent = document.getElementsByClassName("content")[1];
+						descContent.innerText = "LOSE! YOU GOT " + score + " points.";
+					});
+					
+					setTimeout(function() {
+					
+						over.style.display = "none";
+					}, 1200);
+					
+					container.appendChild(over);
+				
+				}
+				
+				
+				var range = document.getElementById("range");
+				range.addEventListener("input", function(){
+					
+					time1 = this.value * 10;
+					time2 = this.value * 20;
+					console.log(time1+ " " + time2);
+					clearInterval(timeId);
+					clearInterval(overId);
+					timeId = setInterval(appear, time1);
+					overId = setInterval(gameOver, time2);
+				});
+				
+			};
+		</script>
+
+	</body>
+</html>
